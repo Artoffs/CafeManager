@@ -2,6 +2,7 @@ package by.grsu.CafeManager.DAO.impl;
 
 import by.grsu.CafeManager.DAO.interfaces.IOrderItemDAO;
 import by.grsu.CafeManager.model.OrderItem;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+@Component
 public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
 
     private static DataSource dataSource;

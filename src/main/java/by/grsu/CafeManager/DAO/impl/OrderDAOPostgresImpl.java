@@ -3,6 +3,7 @@ package by.grsu.CafeManager.DAO.impl;
 import by.grsu.CafeManager.DAO.interfaces.IOrderDAO;
 import by.grsu.CafeManager.model.Order;
 import by.grsu.CafeManager.model.OrderStatus;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -13,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Component
 public class OrderDAOPostgresImpl implements IOrderDAO {
 
     private static DataSource dataSource;

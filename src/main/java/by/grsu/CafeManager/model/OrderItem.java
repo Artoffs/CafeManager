@@ -7,5 +7,6 @@ public class OrderItem {
     private Long id;
     private Order order;
     private User user;
+    private Dish dish;
     private int quantity;
 }
