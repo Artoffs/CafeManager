@@ -42,7 +42,7 @@ public class UserDAOPostgresImpl implements IUserDAO {
     @Override
     public Optional<User> getUser(Long id) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(GET);) {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET)) {
             preparedStatement.setLong(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next()
@@ -73,7 +73,7 @@ public class UserDAOPostgresImpl implements IUserDAO {
     @Override
     public User saveUser(User user) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT);) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT)) {
 
             preparedStatement.setString(0, user.getUsername());
 //            preparedStatement.setString(1, user.getUsername()); хеш пароля здесь надо
