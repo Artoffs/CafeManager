@@ -8,7 +8,8 @@ import lombok.Data;
 public class Dish {
     private Long id;
     private String name;
-    private float price;
     private String description;
+    private float price;
+    private String category;
     private boolean isAvailable;
 }

@@ -2,7 +2,7 @@ package by.grsu.CafeManager.DAO.impl;
 
 import by.grsu.CafeManager.DAO.interfaces.IOrderDAO;
 import by.grsu.CafeManager.model.Order;
-import by.grsu.CafeManager.model.OrderStatus;
+import by.grsu.CafeManager.model.enums.OrderStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

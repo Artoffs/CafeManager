@@ -1,25 +1,38 @@
-CREATE TABLE IF NOT EXISTS public."user"
-(
-    id bigint NOT NULL PRIMARY KEY,
-    username VARCHAR(255),
-    password VARCHAR(100),
-    createdAt TIMESTAMP DEFAULT NOW(),
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(20) NOT NULL,
 );
 
-CREATE TABLE IF NOT EXISTS public.dish
-(
-    id bigint NOT NULL PRIMARY KEY,
-    name VARCHAR(255),
-    price numeric,
-    description VARCHAR(255),
-    "isAvailable" boolean,
-)
+CREATE TABLE IF NOT EXISTS dish (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    description TEXT,
+    price DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    is_available BOOLEAN DEFAULT TRUE
+);
 
-create table IF NOT EXISTS "order" (
-id bigserial primary key,
-user_id int,
-order_status varchar(255),
-createdAt TIMESTAMP default now(),
-totalPrice numeric,
-foreign key (user_id) references "user"(id)
+CREATE TABLE IF NOT EXISTS cafe_table (
+    id BIGSERIAL PRIMARY KEY,
+    table_number VARCHAR(20) NOT NULL UNIQUE,
+    status VARCHAR(20) DEFAULT 'FREE'
+);
+
+CREATE TABLE IF NOT EXISTS orders (
+    id BIGSERIAL PRIMARY KEY,
+    table_id BIGINT REFERENCES cafe_table(id),
+    user_id BIGINT REFERENCES users(id),
+    status VARCHAR(20) DEFAULT 'CREATED',
+    created_at TIMESTAMP DEFAULT NOW(),
+    closed_at TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS order_item (
+    id BIGSERIAL PRIMARY KEY,
+    order_id BIGINT REFERENCES orders(id) ON DELETE CASCADE,
+    dish_id BIGINT REFERENCES dish(id),
+    quantity INT NOT NULL DEFAULT 1,
+    comment TEXT
 );
