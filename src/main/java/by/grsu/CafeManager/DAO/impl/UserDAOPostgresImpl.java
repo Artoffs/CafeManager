@@ -92,7 +92,7 @@ public class UserDAOPostgresImpl implements IUserDAO {
             preparedStatement.setLong(0, user.getId());
             preparedStatement.setString(1, user.getUsername());
             preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setDate(3, (Date) user.getCreatedAt());
+//            preparedStatement.setDate(3, (Date) user.getCreatedAt());
             preparedStatement.setLong(4, user.getId());
 
             preparedStatement.executeUpdate();

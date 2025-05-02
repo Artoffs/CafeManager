@@ -9,6 +9,6 @@ public interface IDishDAO {
     Optional<Dish> getDish(Long id);
     List<Dish> getDishes();
     Dish saveDish(Dish dish);
-    Dish updateDish(Dish dish);
+    void updateDish(Dish dish);
     void deleteDish(Dish dish);
 }

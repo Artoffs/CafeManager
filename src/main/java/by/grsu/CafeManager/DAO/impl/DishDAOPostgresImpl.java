@@ -3,6 +3,7 @@ package by.grsu.CafeManager.DAO.impl;
 import by.grsu.CafeManager.DAO.interfaces.IDishDAO;
 import by.grsu.CafeManager.model.Dish;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
@@ -10,12 +11,24 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public class DishDAOPostgresImpl implements IDishDAO {
+
+    @Value("${dish.get}")
+    private String GET_BY_ID;
+    @Value("${dish.getAll}")
+    private String GET_ALL;
+    @Value("${dish.insert}")
+    private String INSERT;
+    @Value("${dish.update}")
+    private String UPDATE;
+    @Value("${dish.delete}")
+    private String DELETE;
 
     private final DataSource dataSource;
 
@@ -27,8 +40,10 @@ public class DishDAOPostgresImpl implements IDishDAO {
     @Override
     public Optional<Dish> getDish(Long id) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("");
-            ResultSet rs = preparedStatement.executeQuery()) {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ID)) {
+
+            preparedStatement.setLong(1, id);
+            ResultSet rs = preparedStatement.executeQuery();
 
             return rs.next()
                     ? Optional.of(mapRowToDish(rs))
@@ -42,7 +57,7 @@ public class DishDAOPostgresImpl implements IDishDAO {
     @Override
     public List<Dish> getDishes() {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("");
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL);
             ResultSet rs = preparedStatement.executeQuery()) {
 
             List<Dish> dishList = new ArrayList<>();
@@ -50,6 +65,7 @@ public class DishDAOPostgresImpl implements IDishDAO {
             while(rs.next()) {
                 dishList.add(mapRowToDish(rs));
             }
+            rs.close();
             return dishList;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -59,24 +75,40 @@ public class DishDAOPostgresImpl implements IDishDAO {
     @Override
     public Dish saveDish(Dish dish) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("")) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(1, dish.getName());
+            preparedStatement.setString(2, dish.getName());
+            preparedStatement.setFloat(3, dish.getPrice());
+            preparedStatement.setString(4, dish.getName());
+            preparedStatement.setBoolean(5, dish.isAvailable());
+
+            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
+                if(resultSet.next()) {
+                    dish.setId(resultSet.getLong(1));
+                }
+            }
 
             return dish;
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Не удалось сохранить блюдо",e);
         }
     }
 
     @Override
-    public Dish updateDish(Dish dish) {
+    public void updateDish(Dish dish) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("")) {
+            PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
+
+            preparedStatement.setLong(1, dish.getId());
+            preparedStatement.setString(2, dish.getName());
+            preparedStatement.setString(3, dish.getName());
+            preparedStatement.setFloat(4, dish.getPrice());
+            preparedStatement.setString(5, dish.getName());
+            preparedStatement.setBoolean(6, dish.isAvailable());
+            preparedStatement.setLong(7, dish.getId());
 
             preparedStatement.executeUpdate();
-
-            return dish;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -85,8 +117,9 @@ public class DishDAOPostgresImpl implements IDishDAO {
     @Override
     public void deleteDish(Dish dish) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("")) {
+            PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
 
+            preparedStatement.setLong(1, dish.getId());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -95,11 +128,12 @@ public class DishDAOPostgresImpl implements IDishDAO {
 
     private Dish mapRowToDish(ResultSet rs) throws SQLException {
         return Dish.builder()
-                .id(rs.getLong(1))
-                .name(rs.getString(2))
-                .description(rs.getString(3))
-                .price(rs.getFloat(4))
-                .isAvailable(rs.getBoolean(5))
+                .id(rs.getLong("id"))
+                .name(rs.getString("name"))
+                .description(rs.getString("description"))
+                .price(rs.getFloat("price"))
+                .category(rs.getString("category"))
+                .isAvailable(rs.getBoolean("is_available"))
                 .build();
     }
 }
