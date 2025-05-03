@@ -80,7 +80,9 @@ public class TableDAOPostgresImpl implements ITableDAO {
             preparedStatement.setString(2, table.getPosition());
             preparedStatement.setString(3, table.getStatus().toString());
 
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+            preparedStatement.executeUpdate();
+
+            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if(resultSet.next()) {
                     table.setId(resultSet.getLong(1));
                 }

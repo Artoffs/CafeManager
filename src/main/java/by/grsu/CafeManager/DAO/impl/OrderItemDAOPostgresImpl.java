@@ -89,7 +89,9 @@ public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
             preparedStatement.setInt(4, orderItem.getQuantity());
             preparedStatement.setString(5, orderItem.getComment());
 
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+            preparedStatement.executeUpdate();
+
+            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if(resultSet.next()) {
                     orderItem.setId(resultSet.getLong(1));
                 }

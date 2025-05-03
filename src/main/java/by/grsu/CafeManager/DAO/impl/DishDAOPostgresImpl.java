@@ -85,6 +85,8 @@ public class DishDAOPostgresImpl implements IDishDAO {
             preparedStatement.setString(4, dish.getName());
             preparedStatement.setBoolean(5, dish.isAvailable());
 
+            preparedStatement.executeUpdate();
+
             try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if(resultSet.next()) {
                     dish.setId(resultSet.getLong(1));

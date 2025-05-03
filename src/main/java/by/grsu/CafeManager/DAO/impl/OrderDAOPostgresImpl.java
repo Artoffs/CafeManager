@@ -89,7 +89,9 @@ public class OrderDAOPostgresImpl implements IOrderDAO {
             preparedStatement.setString(3, order.getOrderStatus().toString());
             preparedStatement.setDate(4, (Date) order.getCreatedAt());
 
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+            preparedStatement.executeUpdate();
+
+            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
                 if(resultSet.next()) {
                     order.setId(resultSet.getLong(1));
                 }

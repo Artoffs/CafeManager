@@ -79,9 +79,11 @@ public class UserDAOPostgresImpl implements IUserDAO {
             preparedStatement.setString(2, user.getPassword());
             preparedStatement.setString(3,user.getRole().toString());
 
-            try(ResultSet resultSet = preparedStatement.executeQuery()) {
-                if(resultSet.next()) {
-                    user.setId(resultSet.getLong(1));
+            preparedStatement.executeUpdate();
+
+            try(ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    user.setId(generatedKeys.getLong(1));
                 }
             }
 
