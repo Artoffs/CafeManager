@@ -165,7 +165,7 @@ public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
 
 
         return OrderItem.builder()
-                .id(rs.getLong("id"))
+                .id(rs.getLong("order_item_id"))
                 .order(order)
                 .dish(dish)
                 .quantity(rs.getInt("quantity"))
