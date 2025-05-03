@@ -9,6 +9,6 @@ public interface IOrderDAO {
     Optional<Order> getOrder(Long id);
     List<Order> getOrders();
     Order saveOrder(Order order);
-    Order updateOrder(Order order);
-    boolean deleteOrder(Order order);
+    void updateOrder(Order order);
+    void deleteOrder(Order order);
 }

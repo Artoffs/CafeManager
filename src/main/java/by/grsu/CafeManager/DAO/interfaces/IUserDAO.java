@@ -9,6 +9,6 @@ public interface IUserDAO {
     Optional<User> getUser(Long id);
     List<User> getUsers();
     User saveUser(User user);
-    User updateUser(User user);
-    boolean deleteUser(User user);
+    void updateUser(User user);
+    void deleteUser(User user);
 }

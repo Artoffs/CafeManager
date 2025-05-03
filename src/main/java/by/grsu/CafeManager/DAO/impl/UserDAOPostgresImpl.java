@@ -2,13 +2,13 @@ package by.grsu.CafeManager.DAO.impl;
 
 import by.grsu.CafeManager.DAO.interfaces.IUserDAO;
 import by.grsu.CafeManager.model.User;
+import by.grsu.CafeManager.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,11 +73,18 @@ public class UserDAOPostgresImpl implements IUserDAO {
     @Override
     public User saveUser(User user) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setString(0, user.getUsername());
-//            preparedStatement.setString(1, user.getUsername()); хеш пароля здесь надо
-            preparedStatement.executeUpdate();
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setString(3,user.getRole().toString());
+
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                if(resultSet.next()) {
+                    user.setId(resultSet.getLong(1));
+                }
+            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -85,31 +92,29 @@ public class UserDAOPostgresImpl implements IUserDAO {
     }
 
     @Override
-    public User updateUser(User user) {
+    public void updateUser(User user) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
 
-            preparedStatement.setLong(0, user.getId());
-            preparedStatement.setString(1, user.getUsername());
-            preparedStatement.setString(2, user.getPassword());
-//            preparedStatement.setDate(3, (Date) user.getCreatedAt());
-            preparedStatement.setLong(4, user.getId());
+            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setString(2, user.getUsername());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getRole().toString());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return user;
     }
 
     @Override
-    public boolean deleteUser(User user) {
+    public void deleteUser(User user) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
 
-            preparedStatement.setLong(0, user.getId());
+            preparedStatement.setLong(1, user.getId());
+            preparedStatement.executeUpdate();
 
-            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -120,6 +125,7 @@ public class UserDAOPostgresImpl implements IUserDAO {
                 .id(resultSet.getLong("id"))
                 .username(resultSet.getString("username"))
                 .password(resultSet.getString("password"))
+                .role(Role.valueOf(resultSet.getString("role")))
                 .build();
     }
 }
