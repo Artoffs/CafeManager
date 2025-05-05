@@ -5,7 +5,7 @@ import by.grsu.CafeManager.model.Dish;
 import java.util.List;
 import java.util.Optional;
 
-public interface IDishDAO {
+public interface DishDAO {
     Optional<Dish> getDish(Long id);
     List<Dish> getDishes();
     Dish saveDish(Dish dish);

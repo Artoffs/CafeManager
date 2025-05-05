@@ -5,7 +5,7 @@ import by.grsu.CafeManager.model.Table;
 import java.util.List;
 import java.util.Optional;
 
-public interface ITableDAO {
+public interface TableDAO {
     Optional<Table> getTable(Long id);
     List<Table> getTables();
     Table saveTable(Table table);

@@ -5,7 +5,7 @@ import by.grsu.CafeManager.model.User;
 import java.util.List;
 import java.util.Optional;
 
-public interface IUserDAO {
+public interface UserDAO {
     Optional<User> getUser(Long id);
     List<User> getUsers();
     User saveUser(User user);

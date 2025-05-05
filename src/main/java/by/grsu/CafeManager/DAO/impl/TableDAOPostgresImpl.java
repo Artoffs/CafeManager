@@ -1,6 +1,6 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.ITableDAO;
+import by.grsu.CafeManager.DAO.interfaces.TableDAO;
 import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.enums.TableStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TableDAOPostgresImpl implements ITableDAO {
+public class TableDAOPostgresImpl implements TableDAO {
 
     @Value("${table.get}")
     private String GET;

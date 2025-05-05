@@ -5,7 +5,7 @@ import by.grsu.CafeManager.model.OrderItem;
 import java.util.List;
 import java.util.Optional;
 
-public interface IOrderItemDAO {
+public interface OrderItemDAO {
     Optional<OrderItem> getOrderItem(Long id);
     List<OrderItem> getOrderItems();
     OrderItem saveOrderItem(OrderItem orderItem);

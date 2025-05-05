@@ -1,6 +1,6 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.IDishDAO;
+import by.grsu.CafeManager.DAO.interfaces.DishDAO;
 import by.grsu.CafeManager.model.Dish;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,7 @@ import java.util.Optional;
 // Completed
 
 @Repository
-public class DishDAOPostgresImpl implements IDishDAO {
+public class DishDAOPostgresImpl implements DishDAO {
 
     @Value("${dish.get}")
     private String GET_BY_ID;

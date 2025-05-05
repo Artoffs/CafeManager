@@ -1,6 +1,6 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.IUserDAO;
+import by.grsu.CafeManager.DAO.interfaces.UserDAO;
 import by.grsu.CafeManager.model.User;
 import by.grsu.CafeManager.model.enums.Role;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 
 @Component("dao")
-public class UserDAOPostgresImpl implements IUserDAO {
+public class UserDAOPostgresImpl implements UserDAO {
 
     private final DataSource dataSource;
 

@@ -1,6 +1,6 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.IOrderItemDAO;
+import by.grsu.CafeManager.DAO.interfaces.OrderItemDAO;
 import by.grsu.CafeManager.model.Dish;
 import by.grsu.CafeManager.model.Order;
 import by.grsu.CafeManager.model.OrderItem;
@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
+public class OrderItemDAOPostgresImpl implements OrderItemDAO {
 
     @Value("${orderItem.get}")
     private String GET;

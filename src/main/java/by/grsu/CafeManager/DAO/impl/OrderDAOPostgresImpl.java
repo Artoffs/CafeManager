@@ -1,6 +1,6 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.IOrderDAO;
+import by.grsu.CafeManager.DAO.interfaces.OrderDAO;
 import by.grsu.CafeManager.model.Order;
 import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.User;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class OrderDAOPostgresImpl implements IOrderDAO {
+public class OrderDAOPostgresImpl implements OrderDAO {
 
     private final DataSource dataSource;
 
