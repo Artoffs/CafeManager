@@ -25,6 +25,8 @@ public class UserDAOPostgresImpl implements UserDAO {
     // sql.properties
     @Value("${user.get}")
     private String GET;
+    @Value("${user.getByUsername}")
+    private String GET_BY_USERNAME;
     @Value("${user.getAll}")
     private String SELECT_ALL;
     @Value("${user.insert}")
@@ -44,6 +46,20 @@ public class UserDAOPostgresImpl implements UserDAO {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(GET)) {
             preparedStatement.setLong(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next()
+                    ? Optional.of(mapRowToUser(resultSet))
+                    : Optional.empty();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public Optional<User> getByUsername(String username) {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_USERNAME)) {
+            preparedStatement.setString(1, username);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next()
                     ? Optional.of(mapRowToUser(resultSet))

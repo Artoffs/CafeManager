@@ -151,11 +151,11 @@ public class OrderDAOPostgresImpl implements OrderDAO {
                 .build();
 
         return Order.builder()
-                .id(resultSet.getLong("id"))
+                .id(resultSet.getLong("order_id"))
                 .table(table)
                 .user(user)
                 .orderStatus(OrderStatus.valueOf(resultSet.getString("order_status")))
-                .createdAt(resultSet.getDate("createdAt"))
+                .createdAt(resultSet.getDate("created_at"))
                 .build();
     }
 }
