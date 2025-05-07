@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class TestController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @Autowired
     public TestController(UserService userService) {
