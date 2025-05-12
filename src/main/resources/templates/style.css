@@ -1,0 +1,53 @@
+header{
+    background: #cbffab;
+}
+
+ul{
+    list-style: none;
+    margin: 0;
+    padding: 20px;
+}
+
+a{
+    font-size: 40px;
+    padding: 20px;
+    color: #293133;
+    text-decoration: none;
+}
+
+a:hover{
+    color: #ffcf48;
+    text-decoration: none;
+}
+
+li{
+    display: inline;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    right: 14px;
+}
+
+.form-container {
+    max-width: 320px;
+}
+
+ .form-container input[type=text], .form-container input[type=password] {
+    width: 100%;
+}
+
+ .form-container input[type=text]:focus, .form-container input[type=password]:focus {
+    background-color: #ddd;
+}
+
+.form-container .btn {
+    background-color: #1976D2;
+    opacity: 0.7;
+}
+
+.form-container .cancel {
+    background-color: #448AFF;
+}
