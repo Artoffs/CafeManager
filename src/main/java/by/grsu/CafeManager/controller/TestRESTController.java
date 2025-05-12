@@ -17,7 +17,6 @@ public class TestRESTController {
     }
 
     @GetMapping("/user")
-    @ResponseBody
     public UserDTO testUser(@RequestParam String id) {
         return userService.getUser(Long.parseLong(id));
     }

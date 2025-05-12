@@ -30,7 +30,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> getAll() {
-        return List.of();
+        return userDAO.getUsers().stream()
+                .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole()))
+                .toList();
     }
 
     @Override
@@ -47,6 +49,8 @@ public class UserServiceImpl implements UserService {
     public UserDTO saveUser(UserDTO userDTO) {
         if(userDTO.getName() == null || userDTO.getName().isBlank()) {
             throw new IllegalArgumentException("Имя пользователя не может быть пустым");
+        } else if (userDAO.getByUsername(userDTO.getName()).isPresent()) {
+            throw new IllegalArgumentException("Пользователь с таким именем уже существует");
         }
 
         User user = new User();

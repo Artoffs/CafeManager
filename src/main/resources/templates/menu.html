@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список заказов</title>
+    <link th:href="@{/css/home.css}" rel="stylesheet">
+</head>
+<body>
+
+<header align="center">
+    <ul>
+        <li><a href="/home">Главная</a></li>
+        <li><a>|</a></li>
+        <li><a href="/menu">Меню</a></li>
+        <li><a>|</a></li>
+        <li><a href="/users">Пользователи</a></li>
+        <li><a>|</a></li>
+        <li><a href="/orders">Заказы</a></li>
+        <li><a>|</a></li>
+    </ul>
+</header>
+
+<div class="table">
+    <h1>Меню</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Категория</th>
+            <th>Доступность</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Thymeleaf цикл для отображения заказов -->
+        <tr th:each="dish : ${dishes}">
+            <td th:text="${dish.id}"></td>
+            <td th:text="${dish.name}"></td>
+            <td th:text="${dish.description}"></td>
+            <td th:text="${dish.price}"></td>
+            <td th:text="${dish.category}"></td>
+            <td th:text="${dish.isAvailable}"></td>
+            <td><button>Удалить</button></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

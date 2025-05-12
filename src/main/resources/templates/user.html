@@ -21,32 +21,28 @@
 </header>
 
 <div class="table">
-    <h1>Список заказов</h1>
+    <h1>Список пользователей</h1>
     <table>
         <thead>
         <tr>
             <th>ID</th>
-            <th>Столик</th>
-            <th>Создан</th>
+            <th>Username</th>
             <th>Роль</th>
-            <th>Статус</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         <!-- Thymeleaf цикл для отображения заказов -->
-        <tr th:each="order : ${orders}">
-            <td th:text="${order.id}"></td>
-            <td th:text="${order.table.position}"></td>
-            <td th:text="${order.user.username}"></td>
-            <td th:text="${order.user.role}"></td>
-            <td th:text="${order.orderStatus}"></td>
+        <tr th:each="user : ${users}">
+            <td th:text="${user.id}"></td>
+            <td th:text="${user.name}"></td>
+            <td th:text="${user.role}"></td>
             <td><button>Удалить</button></td>
         </tr>
         </tbody>
     </table>
 </div>
-<button class="open-button" onclick="openForm()">Создать заказ</button>
+<button class="open-button" onclick="openForm()">Добавить пользователя</button>
 
 <script>
     function openForm() {

@@ -1,22 +1,26 @@
 <!DOCTYPE HTML>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <title>Добро пожаловать</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-        </head>
-        <body>
+    <link th:href="@{/css/home.css}" rel="stylesheet">
 
-        <header align="center">
-            <ul>
-                <li><a href="/home">Главная</a></li>
-                <li><a>|</a></li>
-                <li><a href="/orders">Заказы</a></li>
-                <li><a>|</a></li>
-                <li><a href="#">О нас</a></li>
-            </ul>
-        </header>
+</head>
+<body>
 
-        </body>
+<header align="center">
+    <ul>
+        <li><a href="/home">Главная</a></li>
+        <li><a>|</a></li>
+        <li><a href="/menu">Меню</a></li>
+        <li><a>|</a></li>
+        <li><a href="/users">Пользователи</a></li>
+        <li><a>|</a></li>
+        <li><a href="/orders">Заказы</a></li>
+        <li><a>|</a></li>
+    </ul>
+</header>
 
-        </html>
+</body>
+
+</html>
