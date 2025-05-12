@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
+
 @Controller
 public class DishController {
 
@@ -17,8 +19,9 @@ public class DishController {
     }
 
     @GetMapping("/menu")
-    public String getAllDishes(Model model) {
+    public String getAllDishes(Model model, Principal principal) {
         model.addAttribute("dishes", dishService.getAll());
+        model.addAttribute("current_user", principal.getName());
         return "menu";
     }
 }

@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS cafe_table (
 
 CREATE TABLE IF NOT EXISTS orders (
     id BIGSERIAL PRIMARY KEY,
-    table_id BIGINT REFERENCES cafe_table(id),
-    user_id BIGINT REFERENCES users(id),
+    table_id BIGINT REFERENCES cafe_table(id) ON DELETE CASCADE,
+    user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     status VARCHAR(20) DEFAULT 'CREATED',
     created_at TIMESTAMP DEFAULT NOW(),
     closed_at TIMESTAMP

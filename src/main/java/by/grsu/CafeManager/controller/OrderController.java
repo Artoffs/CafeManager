@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.security.Principal;
+
 @Controller
 public class OrderController {
 
@@ -17,8 +19,9 @@ public class OrderController {
     }
 
     @GetMapping("/orders")
-    public String allOrders(Model model) {
+    public String allOrders(Model model, Principal principal) {
         model.addAttribute("orders", orderDAO.getOrders());
+        model.addAttribute("current_user", principal.getName());
         return "orders";
     }
 }

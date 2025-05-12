@@ -20,6 +20,8 @@ public class UserDetailsService implements org.springframework.security.core.use
         return userDAO.getByUsername(username).map(user -> User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles(user.getRole().toString()).build()).orElseThrow(() -> new UsernameNotFoundException("Пользователь с таким логином не найден"));
+                .roles(user.getRole().toString())
+                .build())
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с таким логином не найден"));
     }
 }
