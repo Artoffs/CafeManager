@@ -44,7 +44,13 @@
             <td th:text="${dish.price}"></td>
             <td th:text="${dish.category}"></td>
             <td th:text="${dish.isAvailable}"></td>
-            <td><button>Удалить</button></td>
+            <td>
+                <form action="#" th:action="@{'/menu/delete/{id}'(id=${dish.id})}" th:method="delete" >
+                    <button type="submit" class="btn">
+                        Удалить
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Список заказов</title>
+    <link th:href="@{/css/home.css}" rel="stylesheet">
+</head>
+<body>
+
+<header align="center">
+    <ul>
+        <li><a href="/home">Главная</a></li>
+        <li><a>|</a></li>
+        <li><a href="/menu">Меню</a></li>
+        <li><a>|</a></li>
+        <li><a href="/users">Пользователи</a></li>
+        <li><a>|</a></li>
+        <li><a href="/orders">Заказы</a></li>
+        <li><a>|</a></li>
+    </ul>
+</header>
+
+<div class="table">
+    <h1>Состав заказа</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Заказ</th>
+            <th>Блюдо</th>
+            <th>Цена</th>
+            <th>Количество</th>
+            <th>Комментарий</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Thymeleaf цикл для отображения -->
+        <tr th:each="details : ${orderDetails}">
+            <td th:text="${details.id}"></td>
+            <td th:text="${details.order.id}"></td>
+            <td th:text="${details.dish.name}"></td>
+            <td th:text="${details.dish.price}"></td>
+            <td th:text="${details.quantity}"></td>
+            <td th:text="${details.comment}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

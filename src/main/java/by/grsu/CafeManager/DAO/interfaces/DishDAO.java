@@ -10,5 +10,5 @@ public interface DishDAO {
     List<Dish> getDishes();
     Dish saveDish(Dish dish);
     void updateDish(Dish dish);
-    void deleteDish(Dish dish);
+    void deleteDish(Long id);
 }

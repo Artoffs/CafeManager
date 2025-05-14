@@ -20,4 +20,12 @@ public class DishServiceImpl {
     public List<Dish> getAll() {
         return dishDAO.getDishes();
     }
+
+    public void deleteDish(Long id) {
+        dishDAO.deleteDish(id);
+    }
+
+    public void updateDish(Dish dish) {
+        dishDAO.updateDish(dish);
+    }
 }

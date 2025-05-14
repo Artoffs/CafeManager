@@ -5,6 +5,7 @@ import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.enums.TableStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Component
 public class TableDAOPostgresImpl implements TableDAO {
 
     @Value("${table.get}")
@@ -125,7 +127,7 @@ public class TableDAOPostgresImpl implements TableDAO {
     private Table mapRowToTable(ResultSet resultSet) throws SQLException {
         return Table.builder()
                 .id(resultSet.getLong("id"))
-                .position(resultSet.getString("position"))
+                .position(resultSet.getString("table_number"))
                 .status(TableStatus.valueOf(resultSet.getString("status")))
                 .build();
     }

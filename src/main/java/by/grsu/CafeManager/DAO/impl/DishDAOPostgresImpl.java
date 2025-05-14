@@ -119,11 +119,11 @@ public class DishDAOPostgresImpl implements DishDAO {
     }
 
     @Override
-    public void deleteDish(Dish dish) {
+    public void deleteDish(Long id) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
 
-            preparedStatement.setLong(1, dish.getId());
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

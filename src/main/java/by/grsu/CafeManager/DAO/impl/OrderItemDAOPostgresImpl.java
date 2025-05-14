@@ -36,6 +36,8 @@ public class OrderItemDAOPostgresImpl implements OrderItemDAO {
     private String UPDATE;
     @Value("${orderItem.delete}")
     private String DELETE;
+    @Value("${orderItem.getByOrderId}")
+    private String GET_BY_ORDER_ID;
 
 
     private final DataSource dataSource;
@@ -68,6 +70,24 @@ public class OrderItemDAOPostgresImpl implements OrderItemDAO {
             ResultSet resultSet = preparedStatement.executeQuery()) {
 
             List<OrderItem> orderItems = new ArrayList<>();
+
+            while (resultSet.next()) {
+                orderItems.add(mapRowToOrderItem(resultSet));
+            }
+            return orderItems;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<OrderItem> getOrderItemsByOrderId(Long id) {
+        List<OrderItem> orderItems = new ArrayList<>();
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ORDER_ID)) {
+
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 orderItems.add(mapRowToOrderItem(resultSet));

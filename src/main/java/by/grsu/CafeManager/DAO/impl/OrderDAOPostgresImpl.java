@@ -125,10 +125,10 @@ public class OrderDAOPostgresImpl implements OrderDAO {
     }
 
     @Override
-    public void deleteOrder(Order order) {
+    public void deleteOrder(Long id) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
-            preparedStatement.setLong(0, order.getId());
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

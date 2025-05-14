@@ -36,42 +36,22 @@
         <tbody>
         <!-- Thymeleaf цикл для отображения заказов -->
         <tr th:each="order : ${orders}">
-            <td th:text="${order.id}"></td>
+            <td><a th:text="${order.id}" th:href="@{'/orders/' + ${order.id}}"></a></td>
             <td th:text="${order.table.position}"></td>
             <td th:text="${order.user.username}"></td>
             <td th:text="${order.user.role}"></td>
             <td th:text="${order.orderStatus}"></td>
-            <td><button>Удалить</button></td>
+            <td>
+                <form action="#" th:action="@{'/orders/delete/{id}'(id=${order.id})}" th:method="delete">
+                    <button type="submit" class="btn">
+                        Удалить
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
-<button class="open-button" onclick="openForm()">Создать заказ</button>
-
-<script>
-    function openForm() {
-        document.getElementById("myForm").style.display = "block"; }
-         function closeForm() {
-document.getElementById("myForm").style.display = "none";
-} </script>
-
-<div class="form-popup" id="myForm">
-    <form action="#" class="form-container">
-        <h1>Заказ</h1>
-        <label for="name"><b>Столик</b></label>
-        <select id="name">
-            <option>Столик 1</option>
-            <option>Столик 2</option>
-            <option>Столик 3</option>
-            <option>Столик 4</option>
-        </select>
-        <label for="email"><b>Е-мейл</b></label>
-        <input type="text" placeholder="Ваш е-мейл" id="email" required>
-        <button type="submit" class="btn">Отправить</button>
-        <button type="button" class="btn cancel" onclick="closeForm()">Закрыть</button>
-    </form>
-</div>
-
-
+<button class="open-button">Создать заказ</button>
 </body>
 </html>

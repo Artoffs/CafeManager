@@ -10,5 +10,5 @@ public interface OrderDAO {
     List<Order> getOrders();
     Order saveOrder(Order order);
     void updateOrder(Order order);
-    void deleteOrder(Order order);
+    void deleteOrder(Long id);
 }

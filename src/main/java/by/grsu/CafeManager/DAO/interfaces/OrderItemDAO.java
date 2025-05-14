@@ -11,4 +11,5 @@ public interface OrderItemDAO {
     OrderItem saveOrderItem(OrderItem orderItem);
     void updateOrderItem(OrderItem orderItem);
     void deleteOrderItem(OrderItem orderItem);
+    public List<OrderItem> getOrderItemsByOrderId(Long id);
 }
