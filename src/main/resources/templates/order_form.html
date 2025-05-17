@@ -5,58 +5,93 @@
     <title>Создать заказ</title>
 </head>
 <body>
-<form th:action="@{/order/create}" th:object="${orderForm}" method="post">
+<form th:action="@{/orders/create}" th:object="${orderForm}" method="post">
+    <!-- Общий tableId для всего заказа -->
+    <div>
+        <label>Стол:</label>
+        <select name="tableId" th:value="${orderForm.tableId}">
+            <option th:each="table : ${tables}"
+                    th:value="${table.id}"
+                    th:text="${table.position}"
+                    th:selected="${table.id == orderForm.tableId}"></option>
+        </select>
+    </div>
+
     <div id="items-container">
-        <div id="template" style="display: none;">
-            <div class="item-row">
-                <select name="items[__index__].dishId">
-                    <option th:each="dish : ${dishes}"
-                            th:value="${dish.id}"
-                            th:text="${dish.name + ' (' + dish.price + ' руб.)'}"></option>
-                </select>
-                <input type="number" name="items[__index__].quantity" min="1" value="1">
-                <button type="button" class="remove-item">Удалить</button>
-            </div>
+        <!-- Начальный элемент -->
+        <div class="item-row">
+            <select name="items[0].dishId">
+                <option th:each="dish : ${dishes}"
+                        th:value="${dish.id}"
+                        th:text="${dish.name + ' (' + dish.price + ' руб.)'}"></option>
+            </select>
+            <input type="number" name="items[0].quantity" min="1" value="1">
+            <input type="text" name="items[0].comment">
+            <button type="button" class="remove-item">Удалить</button>
         </div>
     </div>
+
+    <!-- Шаблон для новых строк -->
+    <template id="item-template">
+        <div class="item-row">
+            <select name="items[__index__].dishId">
+                <option th:each="dish : ${dishes}"
+                        th:value="${dish.id}"
+                        th:text="${dish.name + ' (' + dish.price + ' руб.)'}"></option>
+            </select>
+            <input type="number" name="items[__index__].quantity" min="1" value="1">
+            <input type="text" name="items[__index__].comment">
+            <button type="button" class="remove-item">Удалить</button>
+        </div>
+    </template>
 
     <button type="button" id="add-item">Добавить блюдо</button>
     <button type="submit">Создать заказ</button>
 </form>
 
 <script>
-    // Инициализация
-document.getElementById('add-item').addEventListener('click', addNewRow);
-
-// Добавление строки
-function addNewRow() {
-    const container = document.getElementById('items-container');
-    const index = container.children.length;
-    const template = document.getElementById('template').innerHTML;
-    const newRow = template.replace(/__index__/g, index);
-    container.insertAdjacentHTML('beforeend', newRow);
-
-    // Навешиваем обработчик удаления
-    container.lastElementChild.querySelector('.remove-item')
-        .addEventListener('click', function() {
-            this.closest('.item-row').remove();
-            reindexRows();
+    document.addEventListener('DOMContentLoaded', function() {
+        // Инициализация обработчиков для существующих кнопок удаления
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.item-row').remove();
+                reindexRows();
+            });
         });
-}
 
-// Перенумерация строк после удаления
-function reindexRows() {
-    const rows = document.querySelectorAll('.item-row');
-    rows.forEach((row, index) => {
-        row.querySelector('select').name = `items[${index}].dishId`;
-        row.querySelector('input').name = `items[${index}].quantity`;
+        // Добавление новой строки
+        document.getElementById('add-item').addEventListener('click', addNewRow);
     });
-}
 
-// Гарантированная замена индексов перед отправкой
-document.querySelector('form').addEventListener('submit', function() {
-    reindexRows();
-});
+    function addNewRow() {
+        const container = document.getElementById('items-container');
+        const index = container.children.length;
+        const template = document.getElementById('item-template').innerHTML;
+        const newRow = template.replace(/__index__/g, index);
+        container.insertAdjacentHTML('beforeend', newRow);
+
+        // Навешиваем обработчик удаления
+        container.lastElementChild.querySelector('.remove-item')
+            .addEventListener('click', function() {
+                this.closest('.item-row').remove();
+                reindexRows();
+            });
+    }
+
+    function reindexRows() {
+        const rows = document.querySelectorAll('.item-row');
+        rows.forEach((row, index) => {
+            // Обновляем индексы для полей блюда
+            row.querySelector('select').name = `items[${index}].dishId`;
+            row.querySelector('input[type="number"]').name = `items[${index}].quantity`;
+            row.querySelector('input[type="text"]').name = `items[${index}].comment`;
+        });
+    }
+
+    // Гарантированная замена индексов перед отправкой
+    document.querySelector('form').addEventListener('submit', function() {
+        reindexRows();
+    });
 </script>
 </body>
 </html>

@@ -24,7 +24,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUser(Long id) {
         User user = userDAO.getUser(id)
-                .orElseThrow(() -> new IllegalArgumentException("User with this id not found, id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь с таким id не найден, id: " + id));
+        return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole());
+    }
+
+    @Override
+    public UserDTO getUserByUsername(String username) {
+        User user = userDAO.getByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("Пользователь с таким username не найден"));
         return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole());
     }
 

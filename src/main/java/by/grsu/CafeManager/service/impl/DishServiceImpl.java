@@ -21,6 +21,10 @@ public class DishServiceImpl {
         return dishDAO.getDishes();
     }
 
+    public List<Dish> getAllCurrent() {
+        return dishDAO.getCurrentDishes();
+    }
+
     public void deleteDish(Long id) {
         dishDAO.deleteDish(id);
     }

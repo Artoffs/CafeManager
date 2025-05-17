@@ -3,6 +3,7 @@ package by.grsu.CafeManager.DAO.impl;
 import by.grsu.CafeManager.DAO.interfaces.OrderItemDAO;
 import by.grsu.CafeManager.model.Dish;
 import by.grsu.CafeManager.model.Order;
+import by.grsu.CafeManager.model.OrderForm;
 import by.grsu.CafeManager.model.OrderItem;
 import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.User;
@@ -99,25 +100,17 @@ public class OrderItemDAOPostgresImpl implements OrderItemDAO {
     }
 
     @Override
-    public OrderItem saveOrderItem(OrderItem orderItem) {
+    public void saveOrderItem(OrderForm.OrderItemDto orderItem) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT)) {
 
-            preparedStatement.setLong(1, orderItem.getId());
-            preparedStatement.setLong(2, orderItem.getOrder().getId());
-            preparedStatement.setLong(3, orderItem.getDish().getId());
-            preparedStatement.setInt(4, orderItem.getQuantity());
-            preparedStatement.setString(5, orderItem.getComment());
+            preparedStatement.setLong(1, orderItem.getOrderId());
+            preparedStatement.setLong(2, orderItem.getDishId());
+            preparedStatement.setInt(3, orderItem.getQuantity());
+            preparedStatement.setString(4, orderItem.getComment());
 
             preparedStatement.executeUpdate();
 
-            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                if(resultSet.next()) {
-                    orderItem.setId(resultSet.getLong(1));
-                }
-            }
-
-            return orderItem;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

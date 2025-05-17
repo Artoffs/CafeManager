@@ -21,6 +21,13 @@ public class DishController {
     }
 
     @GetMapping("/menu")
+    public String getCurrentMenu(Model model, Principal principal) {
+        model.addAttribute("dishes", dishService.getAllCurrent());
+        model.addAttribute("current_user", principal.getName());
+        return "menu";
+    }
+
+    @GetMapping("/menu/all")
     public String getAllDishes(Model model, Principal principal) {
         model.addAttribute("dishes", dishService.getAll());
         model.addAttribute("current_user", principal.getName());
@@ -30,6 +37,6 @@ public class DishController {
     @DeleteMapping("/menu/delete/{id}")
     public String deleteDish(@PathVariable Long id) {
         dishService.deleteDish(id);
-        return "redirect/:menu";
+        return "redirect:/menu";
     }
 }

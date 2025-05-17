@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS dish (
     price DECIMAL(10, 2) NOT NULL,
     category VARCHAR(50) NOT NULL,
     is_available BOOLEAN DEFAULT TRUE
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE;
 );
 
 CREATE TABLE IF NOT EXISTS cafe_table (

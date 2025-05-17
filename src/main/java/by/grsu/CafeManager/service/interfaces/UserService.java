@@ -1,14 +1,11 @@
 package by.grsu.CafeManager.service.interfaces;
-
-import by.grsu.CafeManager.DAO.interfaces.UserDAO;
-import by.grsu.CafeManager.model.User;
-import by.grsu.CafeManager.model.enums.Role;
 import by.grsu.CafeManager.service.DTO.UserDTO;
 
 import java.util.List;
 
 public interface UserService {
     UserDTO getUser(Long id);
+    UserDTO getUserByUsername(String username);
     List<UserDTO> getAll();
     void updateUser(UserDTO user);
     UserDTO saveUser(UserDTO user);

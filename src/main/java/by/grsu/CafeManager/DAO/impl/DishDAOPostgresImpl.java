@@ -24,6 +24,8 @@ public class DishDAOPostgresImpl implements DishDAO {
     @Value("${dish.get}")
     private String GET_BY_ID;
     @Value("${dish.getAll}")
+    private String GET_CURRENT;
+    @Value("${dish.getAllIncludeDeleted}")
     private String GET_ALL;
     @Value("${dish.insert}")
     private String INSERT;
@@ -60,6 +62,24 @@ public class DishDAOPostgresImpl implements DishDAO {
     public List<Dish> getDishes() {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(GET_ALL);
+            ResultSet rs = preparedStatement.executeQuery()) {
+
+            List<Dish> dishList = new ArrayList<>();
+
+            while(rs.next()) {
+                dishList.add(mapRowToDish(rs));
+            }
+            rs.close();
+            return dishList;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public List<Dish> getCurrentDishes() {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_CURRENT);
             ResultSet rs = preparedStatement.executeQuery()) {
 
             List<Dish> dishList = new ArrayList<>();
@@ -138,6 +158,7 @@ public class DishDAOPostgresImpl implements DishDAO {
                 .price(rs.getFloat("price"))
                 .category(rs.getString("category"))
                 .isAvailable(rs.getBoolean("is_available"))
+                .isDeleted(rs.getBoolean("is_deleted"))
                 .build();
     }
 }
