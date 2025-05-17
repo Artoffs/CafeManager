@@ -11,6 +11,6 @@ public class Dish {
     private String description;
     private float price;
     private String category;
-    private boolean isAvailable;
-    private boolean isDeleted;
+    private boolean isAvailable = true;
+    private boolean isDeleted = false;
 }

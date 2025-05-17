@@ -1,12 +1,18 @@
 package by.grsu.CafeManager.controller;
 
+import by.grsu.CafeManager.model.Dish;
+import by.grsu.CafeManager.model.OrderForm;
 import by.grsu.CafeManager.service.impl.DishServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.security.Principal;
 
@@ -25,6 +31,26 @@ public class DishController {
         model.addAttribute("dishes", dishService.getAllCurrent());
         model.addAttribute("current_user", principal.getName());
         return "menu";
+    }
+
+    @GetMapping("/menu/create")
+    public String create() {
+        return "menu_create";
+    }
+
+    @PostMapping("/menu/create")
+    @Transactional
+    public String submitOrder(@ModelAttribute Dish dish,
+                              BindingResult result,
+                              Model model,
+                              Principal principal) {
+        if (result.hasErrors()) {
+            System.out.println(result);
+            return "menu_create";
+        }
+
+        dishService.saveDish(dish);
+        return "redirect:/menu";
     }
 
     @GetMapping("/menu/all")

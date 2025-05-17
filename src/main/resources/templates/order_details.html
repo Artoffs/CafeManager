@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Список заказов</title>
@@ -10,13 +11,10 @@
 <header align="center">
     <ul>
         <li><a href="/home">Главная</a></li>
-        <li><a>|</a></li>
         <li><a href="/menu">Меню</a></li>
-        <li><a>|</a></li>
-        <li><a href="/users">Пользователи</a></li>
-        <li><a>|</a></li>
-        <li><a href="/orders">Заказы</a></li>
-        <li><a>|</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a href="/users">Пользователи</a></li>
+        <li sec:authorize="hasAnyRole('ADMIN', 'WAITER')"><a href="/orders">Заказы</a></li>
+        <li th:text="${current_user} ? 'Добро пожаловать, ' + ${current_user} + '!' : ''"></li>
     </ul>
 </header>
 

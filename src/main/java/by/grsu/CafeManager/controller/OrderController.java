@@ -9,7 +9,9 @@ import by.grsu.CafeManager.service.interfaces.OrderService;
 import by.grsu.CafeManager.service.interfaces.TableService;
 import by.grsu.CafeManager.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,6 +49,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders/create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAITER')")
     public String showOrderForm(Model model) {
         model.addAttribute("dishes", dishService.getAllCurrent()); // Список всех блюд
         model.addAttribute("orderForm", new OrderForm()); // Пустая форма заказа
@@ -55,6 +58,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders/create")
+    @Transactional
     public String submitOrder(@ModelAttribute OrderForm orderForm,
                               BindingResult result,
                               Model model,

@@ -25,6 +25,10 @@ public class DishServiceImpl {
         return dishDAO.getCurrentDishes();
     }
 
+    public void saveDish(Dish dish) {
+        dishDAO.saveDish(dish);
+    }
+
     public void deleteDish(Long id) {
         dishDAO.deleteDish(id);
     }

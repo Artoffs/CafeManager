@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Создать заказ</title>
+    <link th:href="@{/css/order_form.css}" rel="stylesheet">
 </head>
 <body>
 <form th:action="@{/orders/create}" th:object="${orderForm}" method="post">
@@ -25,8 +26,10 @@
                         th:value="${dish.id}"
                         th:text="${dish.name + ' (' + dish.price + ' руб.)'}"></option>
             </select>
-            <input type="number" name="items[0].quantity" min="1" value="1">
-            <input type="text" name="items[0].comment">
+            <label for="quantity0">Количество</label>
+            <input type="number" id="quantity0" name="items[0].quantity" min="1" value="1">
+            <label for="comment0">Комментарий к позиции</label>
+            <input type="text" id="comment0" name="items[0].comment">
             <button type="button" class="remove-item">Удалить</button>
         </div>
     </div>
@@ -39,8 +42,10 @@
                         th:value="${dish.id}"
                         th:text="${dish.name + ' (' + dish.price + ' руб.)'}"></option>
             </select>
-            <input type="number" name="items[__index__].quantity" min="1" value="1">
-            <input type="text" name="items[__index__].comment">
+            <label for="quantity">Количество</label>
+            <input type="number" id="quantity" name="items[__index__].quantity" min="1" value="1">
+            <label for="comment">Комментарий к позиции</label>
+            <input type="text" id="comment" name="items[__index__].comment">
             <button type="button" class="remove-item">Удалить</button>
         </div>
     </template>

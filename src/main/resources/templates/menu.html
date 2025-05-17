@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Список заказов</title>
@@ -10,14 +11,10 @@
 <header align="center">
     <ul>
         <li><a href="/home">Главная</a></li>
-        <li><a>|</a></li>
         <li><a href="/menu">Меню</a></li>
-        <li><a>|</a></li>
-        <li><a href="/users">Пользователи</a></li>
-        <li><a>|</a></li>
         <li><a href="/orders">Заказы</a></li>
-        <li><a>|</a></li>
-        <li th:text="'Добро пожаловать, ' + ${current_user} + '!'"></li>
+        <li sec:authorize="hasRole('ADMIN')"><a href="/users">Пользователи</a></li>
+        <li th:text="${current_user} ? 'Добро пожаловать, ' + ${current_user} + '!' : ''"></li>
     </ul>
 </header>
 
@@ -32,11 +29,11 @@
             <th>Цена</th>
             <th>Категория</th>
             <th>Доступность</th>
-            <th></th>
+            <th sec:authorize="hasRole('ADMIN')"></th>
         </tr>
         </thead>
         <tbody>
-        <!-- Thymeleaf цикл для отображения заказов -->
+
         <tr th:each="dish : ${dishes}">
             <td th:text="${dish.id}"></td>
             <td th:text="${dish.name}"></td>
@@ -44,7 +41,7 @@
             <td th:text="${dish.price}"></td>
             <td th:text="${dish.category}"></td>
             <td th:text="${dish.isAvailable}"></td>
-            <td>
+            <td sec:authorize="hasAnyRole('ADMIN')">
                 <form action="#" th:action="@{'/menu/delete/{id}'(id=${dish.id})}" th:method="delete" >
                     <button type="submit" class="btn">
                         Удалить
@@ -55,5 +52,6 @@
         </tbody>
     </table>
 </div>
+<a sec:authorize="hasAnyRole('ADMIN')" href="/menu/create"><button class="open-button" >Создать новую позицию</button></a>
 </body>
 </html>

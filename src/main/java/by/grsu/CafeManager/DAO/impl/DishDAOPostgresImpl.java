@@ -100,9 +100,9 @@ public class DishDAOPostgresImpl implements DishDAO {
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, dish.getName());
-            preparedStatement.setString(2, dish.getName());
+            preparedStatement.setString(2, dish.getDescription());
             preparedStatement.setFloat(3, dish.getPrice());
-            preparedStatement.setString(4, dish.getName());
+            preparedStatement.setString(4, dish.getCategory());
             preparedStatement.setBoolean(5, dish.isAvailable());
 
             preparedStatement.executeUpdate();
