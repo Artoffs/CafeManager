@@ -34,7 +34,7 @@ public class SecurityConfig {
                 .formLogin(form -> form.defaultSuccessUrl("/home"))
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login") // Перенаправление после выхода
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .clearAuthentication(true)

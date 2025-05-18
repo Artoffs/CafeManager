@@ -32,7 +32,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Thymeleaf цикл для отображения заказов -->
         <tr th:each="order : ${orders}">
             <td><a th:text="${order.id}" th:href="@{'/orders/' + ${order.id}}"></a></td>
             <td th:text="${order.table.position}"></td>
@@ -50,6 +49,9 @@
         </tbody>
     </table>
 </div>
-<a sec:authorize="hasAnyRole('ADMIN', 'WAITER')" href="/orders/create"><button class="open-button" >Создать заказ</button></a>
+<div style="text-align: center; margin: 20px 0;">
+    <a sec:authorize="hasAnyRole('ADMIN', 'WAITER')" href="/orders/create" class="open-button">Создать заказ</a>
+</div>
+
 </body>
 </html>

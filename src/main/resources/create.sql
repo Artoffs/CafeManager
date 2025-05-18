@@ -37,3 +37,4 @@ CREATE TABLE IF NOT EXISTS order_item (
     quantity INT NOT NULL DEFAULT 1,
     comment TEXT
 );
+

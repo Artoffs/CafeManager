@@ -30,7 +30,6 @@
         </tr>
         </thead>
         <tbody>
-        <!-- Thymeleaf цикл для отображения заказов -->
         <tr th:each="user : ${users}">
             <td th:text="${user.id}"></td>
             <td th:text="${user.name}"></td>
@@ -40,30 +39,8 @@
         </tbody>
     </table>
 </div>
+<div style="text-align: center; margin: 20px 0;">
 <button class="open-button" onclick="openForm()">Добавить пользователя</button>
-
-<script>
-    function openForm() {
-        document.getElementById("myForm").style.display = "block"; }
-         function closeForm() {
-document.getElementById("myForm").style.display = "none";
-} </script>
-
-<div class="form-popup" id="myForm">
-    <form action="#" class="form-container">
-        <h1>Заказ</h1>
-        <label for="name"><b>Столик</b></label>
-        <select id="name">
-            <option>Столик 1</option>
-            <option>Столик 2</option>
-            <option>Столик 3</option>
-            <option>Столик 4</option>
-        </select>
-        <label for="email"><b>Е-мейл</b></label>
-        <input type="text" placeholder="Ваш е-мейл" id="email" required>
-        <button type="submit" class="btn">Отправить</button>
-        <button type="button" class="btn cancel" onclick="closeForm()">Закрыть</button>
-    </form>
 </div>
 
 

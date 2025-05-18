@@ -24,32 +24,34 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO getUser(Long id) {
         User user = userDAO.getUser(id)
-                .orElseThrow(() -> new IllegalArgumentException("Пользователь с таким id не найден, id: " + id));
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole());
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Пользователь с таким id не найден, id: " + id));
+        return new UserDTO(user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole());
     }
 
     @Override
     public UserDTO getUserByUsername(String username) {
         User user = userDAO.getByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Пользователь с таким username не найден"));
-        return new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole());
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Пользователь с таким username не найден"));
+        return new UserDTO(user.getId(),
+                user.getUsername(),
+                user.getPassword(),
+                user.getRole());
     }
 
     @Override
     public List<UserDTO> getAll() {
         return userDAO.getUsers().stream()
-                .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getPassword(), user.getRole()))
+                .map(user ->
+                        new UserDTO(user.getId(),
+                        user.getUsername(),
+                        user.getPassword(),
+                        user.getRole()))
                 .toList();
-    }
-
-    @Override
-    public void updateUser(UserDTO user) {
-
-    }
-
-    @Override
-    public void deleteUser(UserDTO user) {
-
     }
 
     @Override
@@ -67,7 +69,10 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userDAO.saveUser(user);
 
-        return new UserDTO(savedUser.getId(), savedUser.getUsername(),savedUser.getPassword(), savedUser.getRole());
+        return new UserDTO(savedUser.getId(),
+                savedUser.getUsername(),
+                savedUser.getPassword(),
+                savedUser.getRole());
     }
 
 }

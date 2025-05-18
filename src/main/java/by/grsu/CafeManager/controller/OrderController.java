@@ -51,9 +51,9 @@ public class OrderController {
     @GetMapping("/orders/create")
     @PreAuthorize("hasAnyRole('ADMIN', 'WAITER')")
     public String showOrderForm(Model model) {
-        model.addAttribute("dishes", dishService.getAllCurrent()); // Список всех блюд
-        model.addAttribute("orderForm", new OrderForm()); // Пустая форма заказа
-        model.addAttribute("tables", tableService.getAll()); // Пустая форма заказа
+        model.addAttribute("dishes", dishService.getAllCurrent());
+        model.addAttribute("orderForm", new OrderForm());
+        model.addAttribute("tables", tableService.getAll());
         return "order_form";
     }
 

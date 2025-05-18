@@ -21,7 +21,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order getOrder(Long id) {
-        return orderDAO.getOrder(id).orElseThrow(() -> new IllegalArgumentException("Заказ с таким id не найден"));
+        return orderDAO.getOrder(id).orElseThrow(()
+                -> new IllegalArgumentException("Заказ с таким id не найден"));
     }
 
     @Override
