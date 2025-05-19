@@ -1,7 +1,5 @@
 package by.grsu.CafeManager.controller;
 
-import by.grsu.CafeManager.DAO.interfaces.OrderDAO;
-import by.grsu.CafeManager.DAO.interfaces.TableDAO;
 import by.grsu.CafeManager.model.OrderForm;
 import by.grsu.CafeManager.service.impl.DishServiceImpl;
 import by.grsu.CafeManager.service.impl.OrderDetailsServiceImpl;
@@ -58,6 +56,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders/create")
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAITER')")
     @Transactional
     public String submitOrder(@ModelAttribute OrderForm orderForm,
                               BindingResult result,
@@ -76,6 +75,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/orders/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteOrder(@PathVariable Long id) {
         orderService.deleteOrder(id);
         return "redirect:/orders";
