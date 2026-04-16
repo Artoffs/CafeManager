@@ -1,10 +1,11 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.ITableDAO;
+import by.grsu.CafeManager.DAO.interfaces.TableDAO;
 import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.enums.TableStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TableDAOPostgresImpl implements ITableDAO {
+@Component
+public class TableDAOPostgresImpl implements TableDAO {
 
     @Value("${table.get}")
     private String GET;
@@ -125,7 +127,7 @@ public class TableDAOPostgresImpl implements ITableDAO {
     private Table mapRowToTable(ResultSet resultSet) throws SQLException {
         return Table.builder()
                 .id(resultSet.getLong("id"))
-                .position(resultSet.getString("position"))
+                .position(resultSet.getString("table_number"))
                 .status(TableStatus.valueOf(resultSet.getString("status")))
                 .build();
     }

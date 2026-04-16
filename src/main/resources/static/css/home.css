@@ -1,0 +1,248 @@
+
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #3498db;
+  --accent-color: #e74c3c;
+  --text-color: #333;
+  --light-bg: #f9f9f9;
+  --white: #ffffff;
+  --transition: all 0.3s ease;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--light-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* Шапка сайта */
+header {
+  background-color: var(--white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+header ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+header li {
+  position: relative;
+}
+
+header a {
+  text-decoration: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  transition: var(--transition);
+  border-radius: 4px;
+}
+
+#logout {
+    color: #ff0000;
+    background-color: #f8f8f8;
+    padding: 8px 15px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+header a:hover {
+  color: var(--secondary-color);
+  background-color: rgba(52, 152, 219, 0.1);
+}
+
+#logout:hover {
+    background-color: #ffebee;
+}
+
+header {
+  color: #95a5a6;
+  cursor: default;
+}
+
+/* Анимация подчеркивания для ссылок */
+header a:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: var(--secondary-color);
+  transition: var(--transition);
+  transform: translateX(-50%);
+}
+
+header a:hover:after {
+  width: 70%;
+}
+
+.form-popup {
+    display: none;
+    position: fixed;
+    top: 50%; /* Центрирование по вертикали */
+    left: 50%; /* Центрирование по горизонтали */
+    transform: translate(-50%, -50%); /* Точное центрирование */
+    z-index: 9999; /* Убедитесь, что форма поверх других элементов */
+    border: 3px solid #f1f1f1;
+    background-color: white;
+    padding: 20px;
+    width: 80%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Основные стили таблицы меню */
+.table {
+  width: fit-content;
+  margin: 0 auto;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table h1 {
+  text-align:center;
+  color: #2c3e50;
+  font-size: 1.8rem;
+  padding: 1.5rem 1rem 0;
+  margin: 0 0 1rem;
+  border-bottom: 2px solid #3498db;
+}
+
+/* Стили заголовков */
+.table thead th {
+  background-color: #2c3e50;
+  color: white;
+  font-weight: 500;
+  padding: 12px 16px;
+  text-align: left;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+/* Чередование строк с плавным hover */
+.table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+.table tbody tr:hover {
+  background-color: #e9f7fe;
+  transform: translateX(2px);
+}
+
+/* Стили ячеек */
+.table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+/* Особые стили для колонок */
+.table td:nth-child(1) { /* ID */
+  color: #7f8c8d;
+  font-weight: 300;
+  width: 5%;
+}
+
+.table td:nth-child(2) {
+  text-align: center;
+  font-weight: 600;
+}
+
+.table td:nth-child(4) { /* Цена */
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.table td:nth-child(6) { /* Доступность */
+  text-align: center;
+  width: 10%;
+}
+
+/* Стили для статуса доступности */
+.table td[th\\:text*="true"] {
+  color: #27ae60;
+}
+
+.table td[th\\:text*="false"] {
+  color: #e74c3c;
+}
+
+/* Кнопка удаления */
+.table button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.table button:hover {
+  background-color: #c0392b;
+  transform: scale(1.05);
+}
+
+.open-button {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--secondary-color); /* Используем синий цвет из палитры */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: var(--transition); /* Плавные переходы */
+
+  /* Эффекты при наведении */
+  &:hover {
+    background-color: #2980b9; /* Темнее основной синий */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Эффект при нажатии */
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Иконка (опционально) */
+  &::before {
+    content: "+";
+    margin-right: 8px;
+    font-weight: bold;
+  }
+}
+

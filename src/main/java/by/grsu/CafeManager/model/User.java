@@ -1,10 +1,14 @@
 package by.grsu.CafeManager.model;
 
 import by.grsu.CafeManager.model.enums.Role;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class User {
     private Long id;
@@ -12,3 +16,4 @@ public class User {
     private String password;
     private Role role;
 }
+

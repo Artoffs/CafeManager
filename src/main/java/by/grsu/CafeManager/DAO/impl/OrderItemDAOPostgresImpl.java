@@ -1,8 +1,9 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.IOrderItemDAO;
+import by.grsu.CafeManager.DAO.interfaces.OrderItemDAO;
 import by.grsu.CafeManager.model.Dish;
 import by.grsu.CafeManager.model.Order;
+import by.grsu.CafeManager.model.OrderForm;
 import by.grsu.CafeManager.model.OrderItem;
 import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.User;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
+public class OrderItemDAOPostgresImpl implements OrderItemDAO {
 
     @Value("${orderItem.get}")
     private String GET;
@@ -36,6 +37,8 @@ public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
     private String UPDATE;
     @Value("${orderItem.delete}")
     private String DELETE;
+    @Value("${orderItem.getByOrderId}")
+    private String GET_BY_ORDER_ID;
 
 
     private final DataSource dataSource;
@@ -78,26 +81,36 @@ public class OrderItemDAOPostgresImpl implements IOrderItemDAO {
         }
     }
 
-    @Override
-    public OrderItem saveOrderItem(OrderItem orderItem) {
+    public List<OrderItem> getOrderItemsByOrderId(Long id) {
+        List<OrderItem> orderItems = new ArrayList<>();
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET_BY_ORDER_ID)) {
 
-            preparedStatement.setLong(1, orderItem.getId());
-            preparedStatement.setLong(2, orderItem.getOrder().getId());
-            preparedStatement.setLong(3, orderItem.getDish().getId());
-            preparedStatement.setInt(4, orderItem.getQuantity());
-            preparedStatement.setString(5, orderItem.getComment());
+            preparedStatement.setLong(1, id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                orderItems.add(mapRowToOrderItem(resultSet));
+            }
+            return orderItems;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void saveOrderItem(OrderForm.OrderItemDto orderItem) {
+        try(Connection connection = dataSource.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(INSERT)) {
+
+            preparedStatement.setLong(1, orderItem.getOrderId());
+            preparedStatement.setLong(2, orderItem.getDishId());
+            preparedStatement.setInt(3, orderItem.getQuantity());
+            preparedStatement.setString(4, orderItem.getComment());
 
             preparedStatement.executeUpdate();
 
-            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                if(resultSet.next()) {
-                    orderItem.setId(resultSet.getLong(1));
-                }
-            }
-
-            return orderItem;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

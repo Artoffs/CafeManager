@@ -1,7 +1,8 @@
 package by.grsu.CafeManager.DAO.impl;
 
-import by.grsu.CafeManager.DAO.interfaces.IOrderDAO;
+import by.grsu.CafeManager.DAO.interfaces.OrderDAO;
 import by.grsu.CafeManager.model.Order;
+import by.grsu.CafeManager.model.OrderForm;
 import by.grsu.CafeManager.model.Table;
 import by.grsu.CafeManager.model.User;
 import by.grsu.CafeManager.model.enums.OrderStatus;
@@ -18,12 +19,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Component
-public class OrderDAOPostgresImpl implements IOrderDAO {
+public class OrderDAOPostgresImpl implements OrderDAO {
 
     private final DataSource dataSource;
 
@@ -80,29 +82,24 @@ public class OrderDAOPostgresImpl implements IOrderDAO {
     }
 
     @Override
-    public Order saveOrder(Order order) {
+    public void saveOrder(OrderForm orderForm) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
 
-            preparedStatement.setLong(1, order.getTable().getId());
-            preparedStatement.setLong(2, order.getUser().getId());
-            preparedStatement.setString(3, order.getOrderStatus().toString());
-            preparedStatement.setDate(4, (Date) order.getCreatedAt());
+            preparedStatement.setLong(1, orderForm.getTableId());
+            preparedStatement.setLong(2, orderForm.getUserId());
+            preparedStatement.setString(3, OrderStatus.CREATED.toString());
+            preparedStatement.setDate(4, Date.valueOf(LocalDate.now()));
 
             preparedStatement.executeUpdate();
 
-            try(ResultSet resultSet = preparedStatement.getGeneratedKeys()) {
-                if(resultSet.next()) {
-                    order.setId(resultSet.getLong(1));
-                }
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+            if(generatedKeys.next()) {
+                orderForm.setOrderId(generatedKeys.getLong(1));
             }
-
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return null;
     }
 
     @Override
@@ -125,10 +122,10 @@ public class OrderDAOPostgresImpl implements IOrderDAO {
     }
 
     @Override
-    public void deleteOrder(Order order) {
+    public void deleteOrder(Long id) {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(DELETE)) {
-            preparedStatement.setLong(0, order.getId());
+            preparedStatement.setLong(1, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -151,11 +148,11 @@ public class OrderDAOPostgresImpl implements IOrderDAO {
                 .build();
 
         return Order.builder()
-                .id(resultSet.getLong("id"))
+                .id(resultSet.getLong("order_id"))
                 .table(table)
                 .user(user)
                 .orderStatus(OrderStatus.valueOf(resultSet.getString("order_status")))
-                .createdAt(resultSet.getDate("createdAt"))
+                .createdAt(resultSet.getDate("created_at"))
                 .build();
     }
 }

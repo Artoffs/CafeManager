@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Список заказов</title>
+    <link th:href="@{/css/home.css}" rel="stylesheet">
+</head>
+<body>
+
+<header align="center">
+    <ul>
+        <li><a href="/home">Главная</a></li>
+        <li><a href="/menu">Меню</a></li>
+        <li><a href="/orders">Заказы</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a href="/users">Пользователи</a></li>
+        <li th:text="${current_user} ? 'Добро пожаловать, ' + ${current_user} + '!' : ''"></li>
+    </ul>
+</header>
+
+<div class="table">
+    <h1>Меню</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название</th>
+            <th>Описание</th>
+            <th>Цена</th>
+            <th>Категория</th>
+            <th>Доступность</th>
+            <th sec:authorize="hasRole('ADMIN')"></th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="dish : ${dishes}">
+            <td th:text="${dish.id}"></td>
+            <td th:text="${dish.name}"></td>
+            <td th:text="${dish.description}"></td>
+            <td th:text="${dish.price}"></td>
+            <td th:text="${dish.category}"></td>
+            <td th:text="${dish.isAvailable}"></td>
+            <td sec:authorize="hasAnyRole('ADMIN')">
+                <form action="#" th:action="@{'/menu/delete/{id}'(id=${dish.id})}" th:method="delete" >
+                    <button type="submit" class="btn">
+                        Удалить
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div style="text-align: center; margin: 20px 0;">
+<a sec:authorize="hasAnyRole('ADMIN')" href="/menu/create"><button class="open-button" >Создать новую позицию</button></a>
+</div>
+</body>
+</html>

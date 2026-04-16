@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="utf-8">
+    <title>Добро пожаловать</title>
+    <link th:href="@{/css/home.css}" rel="stylesheet">
+
+</head>
+<body>
+
+<header align="center">
+    <ul>
+        <li><a href="/home">Главная</a></li>
+        <li><a href="/menu">Меню</a></li>
+        <li><a href="/orders">Заказы</a></li>
+        <li sec:authorize="hasRole('ADMIN')"><a href="/users">Пользователи</a></li>
+        <li th:text="${current_user} ? 'Добро пожаловать, ' + ${current_user} + '!' : ''"></li>
+        <li><a href="/logout" id="logout">Выйти</a></li>
+    </ul>
+</header>
+
+</body>
+
+</html>
