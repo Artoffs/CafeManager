@@ -41,7 +41,7 @@ public class TableDAOPostgresImpl implements TableDAO {
     @Override
     public Optional<Table> getTable(Long id) {
         try(Connection connection = dataSource.getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement("GET")) {
+            PreparedStatement preparedStatement = connection.prepareStatement(GET)) {
 
             preparedStatement.setLong(1, id);
             ResultSet rs = preparedStatement.executeQuery();

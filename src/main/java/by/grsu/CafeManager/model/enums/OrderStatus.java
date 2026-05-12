@@ -1,9 +1,9 @@
 package by.grsu.CafeManager.model.enums;
 
 public enum OrderStatus {
-    CREATED,
-    COOKING,
-    READY,
-    PAID,
-    CANCELED
+    CREATED,      // Создан
+    IN_PROGRESS,  // Готовится
+    READY,        // Готов к выдаче
+    COMPLETED,    // Выдан/завершен
+    CANCELLED     // Отменен
 }

@@ -13,12 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -107,18 +102,20 @@ public class OrderDAOPostgresImpl implements OrderDAO {
         try(Connection connection = dataSource.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE)) {
 
-            preparedStatement.setLong(1, order.getId());
-            preparedStatement.setLong(2, order.getTable().getId());
-            preparedStatement.setLong(3, order.getUser().getId());
-            preparedStatement.setString(4, order.getOrderStatus().name());
-            preparedStatement.setDate(5, (Date) order.getCreatedAt());
+            preparedStatement.setLong(1, order.getTable().getId());
+            preparedStatement.setLong(2, order.getUser().getId());
+            preparedStatement.setString(3, order.getOrderStatus().name());
 
+            preparedStatement.setTimestamp(4, new Timestamp(order.getCreatedAt().getTime()));
+            preparedStatement.setLong(5, order.getId());
 
-            preparedStatement.executeUpdate();
+            int affectedRows = preparedStatement.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Обновление заказа не удалось, заказ с id " + order.getId() + " не найден");
+            }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Ошибка при обновлении заказа: " + e.getMessage(), e);
         }
-
     }
 
     @Override
@@ -131,6 +128,8 @@ public class OrderDAOPostgresImpl implements OrderDAO {
             throw new RuntimeException(e);
         }
     }
+
+
 
     private Order mapRowToOrder(ResultSet resultSet) throws SQLException {
 

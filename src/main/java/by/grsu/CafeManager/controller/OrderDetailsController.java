@@ -18,10 +18,10 @@ public class OrderDetailsController {
         this.orderDetailsService = orderDetailsService;
     }
 
-    @GetMapping("/orders/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'WAITER')")
-    public String orderDetails(@PathVariable String id, Model model) {
-        model.addAttribute("orderDetails", orderDetailsService.getByOrderId(Long.parseLong(id)));
-        return "order_details";
-    }
+//    @GetMapping("/orders/{id}")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'WAITER')")
+//    public String orderDetails(@PathVariable String id, Model model) {
+//        model.addAttribute("orderDetails", orderDetailsService.getByOrderId(Long.parseLong(id)));
+//        return "order_details";
+//    }
 }

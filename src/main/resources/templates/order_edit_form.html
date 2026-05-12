@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование заказа #[[${orderId}]]</title>
+    <link th:href="@{/css/order_form.css}" rel="stylesheet">
+    <style>
+        .error-message {
+            color: red;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid red;
+            background: #ffeeee;
+            border-radius: 5px;
+        }
+
+        .order-info {
+            background: #f5f5f5;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Редактирование заказа #[[${orderId}]]</h1>
+
+<div th:if="${error}" class="error-message" th:text="${error}"></div>
+
+<form th:action="@{'/orders/edit/' + ${orderId}}" th:object="${orderForm}" method="post">
+    <!-- Информация о заказе -->
+    <div class="order-info">
+        <p><strong>Заказ #<span th:text="${orderId}"></span></strong></p>
+        <p><strong>Дата создания:</strong> <span th:text="${#dates.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></span></p>
+    </div>
+
+    <!-- Выбор столика -->
+    <div>
+        <label>Стол:</label>
+        <select name="tableId" th:value="${orderForm.tableId}">
+            <option th:each="table : ${tables}"
+                    th:value="${table.id}"
+                    th:text="${table.position}"
+                    th:selected="${table.id == orderForm.tableId}"></option>
+        </select>
+    </div>
+
+    <h3>Блюда в заказе:</h3>
+
+    <div id="items-container">
+        <div th:each="item, iterStat : ${orderForm.items}" class="item-row">
+            <select th:name="'items[' + ${iterStat.index} + '].dishId'">
+                <option th:each="dish : ${dishes}"
+                        th:value="${dish.id}"
+                        th:text="${dish.name + ' (' + dish.price + ' руб.)'}"
+                        th:selected="${dish.id == item.dishId}"></option>
+            </select>
+
+            <label>Количество</label>
+            <input type="number"
+                   th:name="'items[' + ${iterStat.index} + '].quantity'"
+                   th:value="${item.quantity}"
+                   min="1" required>
+
+            <label>Комментарий</label>
+            <input type="text"
+                   th:name="'items[' + ${iterStat.index} + '].comment'"
+                   th:value="${item.comment}">
+
+            <button type="button" class="remove-item">Удалить</button>
+        </div>
+    </div>
+
+    <template id="item-template">
+        <div class="item-row">
+            <select name="items[__index__].dishId">
+                <option th:each="dish : ${dishes}"
+                        th:value="${dish.id}"
+                        th:text="${dish.name + ' (' + dish.price + ' руб.)'}"></option>
+            </select>
+
+            <label>Количество</label>
+            <input type="number" name="items[__index__].quantity" min="1" value="1" required>
+
+            <label>Комментарий</label>
+            <input type="text" name="items[__index__].comment">
+
+            <button type="button" class="remove-item">Удалить</button>
+        </div>
+    </template>
+
+    <button type="button" id="add-item">Добавить блюдо</button>
+    <button type="submit">Сохранить изменения</button>
+    <a href="/orders/[[${orderId}]]" class="btn btn-secondary">Отмена</a>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Обработчики для кнопок удаления
+        document.querySelectorAll('.remove-item').forEach(button => {
+            button.addEventListener('click', function() {
+                if (document.querySelectorAll('.item-row').length > 1) {
+                    this.closest('.item-row').remove();
+                    reindexRows();
+                } else {
+                    alert('В заказе должно быть хотя бы одно блюдо');
+                }
+            });
+        });
+
+        // Добавление новой строки
+        document.getElementById('add-item').addEventListener('click', addNewRow);
+    });
+
+    function addNewRow() {
+        const container = document.getElementById('items-container');
+        const index = container.children.length;
+        const template = document.getElementById('item-template').innerHTML;
+        const newRow = template.replace(/__index__/g, index);
+        container.insertAdjacentHTML('beforeend', newRow);
+
+        container.lastElementChild.querySelector('.remove-item')
+            .addEventListener('click', function() {
+                if (document.querySelectorAll('.item-row').length > 1) {
+                    this.closest('.item-row').remove();
+                    reindexRows();
+                } else {
+                    alert('В заказе должно быть хотя бы одно блюдо');
+                }
+            });
+    }
+
+    function reindexRows() {
+        const rows = document.querySelectorAll('.item-row');
+        rows.forEach((row, index) => {
+            row.querySelector('select').name = `items[${index}].dishId`;
+            row.querySelector('input[type="number"]').name = `items[${index}].quantity`;
+            const commentInput = row.querySelector('input[type="text"]');
+            if (commentInput) {
+                commentInput.name = `items[${index}].comment`;
+            }
+        });
+    }
+
+    document.querySelector('form').addEventListener('submit', function() {
+        reindexRows();
+    });
+</script>
+
+</body>
+</html>

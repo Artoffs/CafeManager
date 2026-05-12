@@ -3,8 +3,102 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Список заказов</title>
+    <title>Детали заказа #[[${order.id}]]</title>
     <link th:href="@{/css/home.css}" rel="stylesheet">
+    <style>
+        .order-container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .order-header {
+            border-bottom: 2px solid #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .order-info {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .order-info p {
+            margin: 10px 0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .status-CREATED { background: #ffc107; color: #000; }
+        .status-IN_PROGRESS { background: #17a2b8; color: #fff; }
+        .status-READY { background: #28a745; color: #fff; }
+        .status-COMPLETED { background: #6c757d; color: #fff; }
+        .status-CANCELLED { background: #dc3545; color: #fff; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+        }
+
+        .total-row {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 2px solid #333;
+            text-align: right;
+        }
+
+        .action-buttons {
+            margin-top: 30px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary { background: #007bff; color: white; }
+        .btn-warning { background: #ffc107; color: #000; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+
+        .btn:hover { opacity: 0.8; }
+
+        .comment-cell {
+            max-width: 200px;
+            word-wrap: break-word;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,37 +106,83 @@
     <ul>
         <li><a href="/home">Главная</a></li>
         <li><a href="/menu">Меню</a></li>
+        <li><a href="/orders">Заказы</a></li>
         <li sec:authorize="hasRole('ADMIN')"><a href="/users">Пользователи</a></li>
-        <li sec:authorize="hasAnyRole('ADMIN', 'WAITER')"><a href="/orders">Заказы</a></li>
         <li th:text="${current_user} ? 'Добро пожаловать, ' + ${current_user} + '!' : ''"></li>
     </ul>
 </header>
 
-<div class="table">
-    <h1>Состав заказа</h1>
-    <table>
+<div class="order-container">
+    <div class="order-header">
+        <h1>Заказ #[[${order.id}]]</h1>
+    </div>
+
+    <div class="order-info">
+        <p><strong>Столик:</strong> <span th:text="${order.table.position}"></span></p>
+        <p><strong>Официант:</strong> <span th:text="${order.user.username}"></span></p>
+        <p><strong>Дата создания:</strong>
+            <span th:text="${#dates.format(order.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+        </p>
+        <p><strong>Статус:</strong>
+            <span class="status-badge" th:classappend="'status-' + ${order.orderStatus}"
+                  th:text="${order.orderStatus}"></span>
+        </p>
+    </div>
+
+    <!-- Только админ может менять статус -->
+    <div sec:authorize="hasRole('ADMIN')" class="status-update">
+        <h3>Изменение статуса</h3>
+        <form action="#" th:action="@{'/orders/' + ${order.id} + '/status'}" method="post">
+            <label><strong>Новый статус:</strong></label>
+            <select name="status">
+                <option th:each="status : ${statuses}"
+                        th:value="${status}"
+                        th:text="${status}"
+                        th:selected="${status == order.orderStatus}">
+                </option>
+            </select>
+            <button type="submit" class="btn btn-primary">Обновить статус</button>
+        </form>
+    </div>
+
+    <h3>Блюда в заказе:</h3>
+
+    <table th:if="${not #lists.isEmpty(order.items)}">
         <thead>
         <tr>
-            <th>ID</th>
-            <th>Заказ</th>
             <th>Блюдо</th>
-            <th>Цена</th>
             <th>Количество</th>
+            <th>Цена</th>
+            <th>Сумма</th>
             <th>Комментарий</th>
         </tr>
         </thead>
         <tbody>
-        <!-- Thymeleaf цикл для отображения -->
-        <tr th:each="details : ${orderDetails}">
-            <td th:text="${details.id}"></td>
-            <td th:text="${details.order.id}"></td>
-            <td th:text="${details.dish.name}"></td>
-            <td th:text="${details.dish.price}"></td>
-            <td th:text="${details.quantity}"></td>
-            <td th:text="${details.comment}"></td>
+        <tr th:each="item : ${order.items}">
+            <td th:text="${item.dish.name}"></td>
+            <td th:text="${item.quantity}"></td>
+            <td th:text="${#numbers.formatDecimal(item.dish.price, 1, 2)} + ' руб.'"></td>
+            <td th:text="${#numbers.formatDecimal(item.dish.price * item.quantity, 1, 2)} + ' руб.'"></td>
+            <td class="comment-cell" th:text="${item.comment != null ? item.comment : '-'}"></td>
         </tr>
         </tbody>
     </table>
+    <p th:if="${#lists.isEmpty(order.items)}" style="text-align: center; color: #666;">
+        В этом заказе пока нет блюд
+    </p>
+
+    <div class="total-row">
+        <span>Итого: </span>
+        <strong th:text="${#numbers.formatDecimal(totalAmount, 1, 2)} + ' руб.'"></strong>
+    </div>
+
+    <div class="action-buttons">
+        <a href="/orders" class="btn btn-secondary">Назад к списку</a>
+        <a sec:authorize="hasAnyRole('ADMIN', 'WAITER')"
+           th:href="@{'/orders/edit/' + ${order.id}}"
+           class="btn btn-primary">Редактировать заказ</a>
+    </div>
 </div>
+
 </body>
 </html>

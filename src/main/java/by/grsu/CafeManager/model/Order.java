@@ -4,6 +4,7 @@ import by.grsu.CafeManager.model.enums.OrderStatus;
 import lombok.Builder;
 import lombok.Data;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @Builder
@@ -13,5 +14,5 @@ public class Order {
     private User user;
     private OrderStatus orderStatus;
     private Date createdAt;
-
+    private List<OrderItem> items;
 }
